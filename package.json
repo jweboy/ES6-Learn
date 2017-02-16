@@ -1,0 +1,15 @@
+{
+  "name": "es6Porject",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {},
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.18.8",
+    "gulp": "^3.9.1",
+    "rimraf": "^2.5.4"
+  },
+  "scripts":{
+    "clean:modules":"rimraf node_modules"
+  }
+}
