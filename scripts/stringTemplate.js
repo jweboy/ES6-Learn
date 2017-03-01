@@ -29,6 +29,7 @@
 world \
 2222';
  console.log( msg4 );
+
  /**
   * 显示换行 \n\
   * 被认为是js的bug 不推荐使用
