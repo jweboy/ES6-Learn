@@ -7,7 +7,7 @@
  const msg = `Hello World`;
  /**
   * 反斜杠(\)转义,双引号+单引号无需转义
-  * @type {[type]}
+  * @type {[String]}
   */
  const msg1 = `\`Hello\` World1`;
  const msg2 = `"Hello" world`;
@@ -43,7 +43,7 @@ world \
  /**
   * es6 简单换行解决方案
   * 反引号之内的空白会作为字符串的一部分存在
-  * @type {[type]}
+  * @type {[String]}
   */
  let msg6 = `hello
             world`;
@@ -53,7 +53,7 @@ world \
 
  /**
   * 多行文本合适缩进，设置模板字面量的第一行空置，再用trim()移除起始的空格
-  * @type {[type]}
+  * @type {[html]}
   */
  let html = `
 <div>
@@ -81,52 +81,49 @@ world \
  console.groupEnd();
 
 
- {
- 	console.group( '标签化模板' );
- 	/**
- 	 * 转换模板字面量并返回最终字符串 在第一个 ` 前指定
- 	 * @type {[type]}
- 	 */
- 	let msg8 = tag `hello world`;
- 	/**
- 	 * 接收模板字面量数据，并划分为独立片段
- 	 * @param  {[Array]} literals      [包含模板字符串]
- 	 * @param  {[Array]} substitutions [每个替换位的解释值,剩余参数的形式]
- 	 * @return {[String]}               [返回原始字符串]
- 	 */
- 	function tag( literals, ...substitutions ) {
- 		console.log( literals ); //["hello world", raw: Array[1]]
- 		console.log( substitutions ); //[]
+ console.group( '标签化模板' );
+ /**
+  * 转换模板字面量并返回最终字符串 在第一个 ` 前指定
+  * @type {[Stirng]}
+  */
+ let msg8 = tag `hello world`;
+ /**
+  * 接收模板字面量数据，并划分为独立片段
+  * @param  {[Array]} literals      [包含模板字符串]
+  * @param  {[Array]} substitutions [每个替换位的解释值,剩余参数的形式]
+  * @return {[String]}               [返回原始字符串]
+  */
+ function tag( literals, ...substitutions ) {
+ 	console.log( literals ); //["hello world", raw: Array[1]]
+ 	console.log( substitutions ); //[]
+ }
+
+ let count = 10,
+ 	price = 0.5,
+ 	message1 = passthru `${count} items cost $${(count*price).toFixed(2)}`;
+ console.log( message1 );
+ /**
+  * linterals 第一个元素是空字符串，确保literals[0]始终是字符串的起始部分
+  *那么literals[literals.length - 1]始终是字符串的结尾部分
+  *替换位的元素数量总比字面量元素少1
+  *因为 substitutions.length === literals.length - 1始终为true
+  *literals.raw输出：保证任何转义字符(包括Unicode代码点的转义)都会以原始的形式返回
+  *
+  * @param  {[Array]} literals      [包含模板字符串]
+  * @param  {[Array]} substitutions [每个替换位的解释值,剩余参数的形式]
+  * @return {[String]}               [返回原始字符串]
+  */
+ function passthru( literals, ...substitutions ) {
+ 	let result = '';
+ 	console.log( literals );
+ 	console.log( substitutions );
+
+ 	for ( var i = 0; i < substitutions.length; i++ ) {
+ 		result += literals[ i ];
+ 		result += substitutions[ i ];
  	}
-
- 	let count = 10,
- 		price = 0.5,
- 		message = passthru `${count} items cost $${(count*price).toFixed(2)}`;
- 	console.log( message );
- 	/**
- 	 * linterals 第一个元素是空字符串，确保literals[0]始终是字符串的起始部分
- 	 *那么literals[literals.length - 1]始终是字符串的结尾部分
- 	 *替换位的元素数量总比字面量元素少1
- 	 *因为 substitutions.length === literals.length - 1始终为true
- 	 *literals.raw输出：保证任何转义字符(包括Unicode代码点的转义)都会以原始的形式返回
- 	 *
- 	 * @param  {[Array]} literals      [包含模板字符串]
- 	 * @param  {[Array]} substitutions [每个替换位的解释值,剩余参数的形式]
- 	 * @return {[String]}               [返回原始字符串]
- 	 */
- 	function passthru( literals, ...substitutions ) {
- 		let result = '';
- 		console.log( literals );
- 		console.log( substitutions );
-
- 		for ( var i = 0; i < substitutions.length; i++ ) {
- 			result += literals[ i ];
- 			result += substitutions[ i ];
- 		}
- 		console.info( result );
- 		//添加最后一个字面量
- 		result += literals.raw[ literals.length - 1 ];
-
- 		return result;
- 	}
+ 	console.info( result );
+ 	//添加最后一个字面量
+ 	result += literals.raw[ literals.length - 1 ];
+ 	return result;
  }
