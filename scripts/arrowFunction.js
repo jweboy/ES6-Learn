@@ -69,3 +69,69 @@ var getTempItem = ( id, name ) => ( {
 } );
 var testObj = getTempItem( 1, 'JL' );
 console.log( testObj );
+console.groupEnd();
+
+console.group( 'IIFE-立即执行函数' );
+/**
+ * 立即执行函数
+ * @param  {[String]} name [name]
+ * @return {[String]}      [name]
+ *
+ * 传统函数只有(function() {})(); || (function() {}());
+ * es6的立即执行函数只有以下一种
+ */
+let person = ( ( name ) => {
+	return {
+		getName: () => {
+			return name;
+		}
+	};
+} )( 'JL' );
+console.log( person.getName() );
+
+/**
+ * es6之前 通过bind(this)来修正,这个过程实际创建了一个新的函数,this绑定到当前的this(以下是当前对象)上
+ * @type {Object}
+ */
+var someObj = {
+	init: function () {
+		document.addEventListener( 'click', function () {
+			console.log( this );
+		}, false );
+	}
+};
+someObj.init();
+
+var someObj1 = {
+	init: function () {
+		document.addEventListener( 'click', ( function () {
+				console.log( this );
+			} )
+			.bind( this ), false );
+	}
+};
+someObj1.init();
+
+/**
+ * es6的this是查找作用于链来确定的。
+ * 如果箭头函数包含在一个非箭头函数内，this就与该非箭头函数的相等，反之则为undefined
+ * @type {Object}
+ */
+var someObj2 = {
+	init: function () {
+		document.addEventListener( 'click', () => {
+			console.log( this );
+		}, false );
+	}
+};
+someObj2.init();
+
+/**
+ * 箭头函数缺失[[Construct]]方法
+ * 不能通过call() apply() bind()来改变this
+ */
+var myType = () => {};
+var newType = new myType();
+console.log( newType );
+
+console.groupEnd();
